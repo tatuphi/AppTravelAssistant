@@ -6,14 +6,19 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.File;
 
 public class DBHelper{
     SQLiteDatabase db;
     String myDBPath;
+    DatabaseReference dn;
 
     // Default Operators:
     public int OpenDB(File storagePath, String dbName){
+
         try{
             myDBPath = storagePath + "/" + dbName;
             db = SQLiteDatabase.openDatabase(myDBPath, null, SQLiteDatabase.CREATE_IF_NECESSARY);
