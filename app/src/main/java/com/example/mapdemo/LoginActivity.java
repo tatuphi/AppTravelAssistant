@@ -77,6 +77,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             if (utils.getName(this) != null ){
                 Intent intent = new Intent(LoginActivity.this, UsersActivity.class);
+                User u = db.getUser(utils.getName(this));
+                intent.putExtra("USER", u.ID);
                 startActivity(intent);
             }else{
 

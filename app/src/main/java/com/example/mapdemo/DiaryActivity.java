@@ -34,6 +34,7 @@ public class DiaryActivity extends AppCompatActivity {
     EditText txtCost, txtNote;
     TextView lblDate;
     ArrayAdapter adapter;
+    Integer userID;
     //ArrayList<String>placeList;
 
     int REQUEST_CODE_CAMERA = 123;
@@ -42,8 +43,13 @@ public class DiaryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.diary);
+        // get userID from Activity that invoke this one
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            userID = extras.getInt("USER");
+        }
 
+        setContentView(R.layout.diary);
         imgV =(ImageView)findViewById(R.id.imgV);
         txtFriend= (TextView) findViewById(R.id.lbFriend);
         txtPlaces = (TextView) findViewById(R.id.lbPlaces);

@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ import java.util.List;
  * Created by delaroy on 3/27/17.
  */
 public class    UsersActivity extends AppCompatActivity {
-
+    private Integer userID;
     private TextView textViewName;
     String[] listviewTitle = new String[]{
             "Hồ Chí Minh", "Hà Nội", "Đã Nẵng", "Nha Trang",
@@ -39,6 +40,14 @@ public class    UsersActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        // get userID from Default
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            userID = extras.getInt("USER");
+        }
+        if(userID != null){
+            Toast.makeText(this.getBaseContext(), "++++++++++", Toast.LENGTH_LONG).show();
+        }
         setContentView(R.layout.activity_users);
         List<HashMap<String, String>> aList = new ArrayList<HashMap<String, String>>();
 
@@ -51,8 +60,6 @@ public class    UsersActivity extends AppCompatActivity {
 
 
         }
-
-
         String[] from = {"listview_image", "listview_title", "listview_discription"};
         int[] to = {R.id.spacecraftImageView, R.id.nameTextView, R.id.propellantTextView};
         SimpleAdapter simpleAdapter = new SimpleAdapter(getBaseContext(), aList, R.layout.model, from,to);
@@ -72,6 +79,7 @@ public class    UsersActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
         switch (item.getItemId()) {
+            //
             case R.id.log_out:
                 PreferenceUtils.savePassword(null, this);
                 PreferenceUtils.saveEmail(null, this);
@@ -79,15 +87,12 @@ public class    UsersActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
                 return true;
-
-
-        case R.id.action_hom:
-//        PreferenceUtils.savePassword(null, this);
-//        PreferenceUtils.saveEmail(null, this);
-        Intent i = new Intent(this, Home.class);
-        startActivity(i);
-        finish();
-        return true;
+            case R.id.action_hom:
+                Intent i = new Intent(this, Home.class);
+                i.putExtra("USER", userID);
+                startActivity(i);
+                finish();
+                return true;
 
     }
 

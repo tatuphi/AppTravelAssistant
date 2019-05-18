@@ -33,7 +33,7 @@ public class ChecklistActivity extends AppCompatActivity {
 
     private DBHelper db;
     String data = "";
-    String userID;
+    Integer userID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,13 +42,13 @@ public class ChecklistActivity extends AppCompatActivity {
         // get userID from Activity that invoke this one
         Bundle extras = getIntent().getExtras();
         if(extras != null){
-            userID = extras.getString("USER");
+            userID = extras.getInt("USER");
         }
         //DB
         db = new DBHelper();
         File path = getApplication().getFilesDir();
         db.OpenDB(path, "mapServiceDB");
-        data = db.getUser(Integer.parseInt(userID)).checklist;
+        data = db.getUser(userID).checklist;
 
         // gang cac controls
         et = (EditText) findViewById(R.id.edit_list);
@@ -82,6 +82,7 @@ public class ChecklistActivity extends AppCompatActivity {
     protected void onDestroy(){
         super.onDestroy();
         // Save Intances to DB First
+
         db.CloseDB();
     }
     public void onStart(){

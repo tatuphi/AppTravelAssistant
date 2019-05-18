@@ -32,6 +32,7 @@ public class DBHelper{
         db.execSQL("CREATE TABLE if not exists `Review` ( `userID` INTEGER NOT NULL, `locationID` INTEGER NOT NULL, `content` TEXT, PRIMARY KEY(`userID`,`locationID`) )");
         db.execSQL("CREATE TABLE if not exists `User` ( `ID` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, `name` TEXT, `username` TEXT, `password` TEXT, `checklist` TEXT, `diary` TEXT, `Field7` INTEGER )");
         db.execSQL("CREATE TABLE if not exists `Users_Locations` ( `userID` INTEGER NOT NULL, `locationID` INTEGER NOT NULL, PRIMARY KEY(`userID`,`locationID`) )");
+        db.execSQL("CREATE TABLE if not exists `Users_Locations` ( `userID` INTEGER NOT NULL, cost, date, note, friends )");
     }
 
     // index for name of user
