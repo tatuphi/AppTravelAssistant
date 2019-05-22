@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TableLayout
+        android:id="@+id/myTableLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="6dp">
+
+        <TableRow>
+
+            <ImageView
+                android:id="@+id/imageView_CmtIcon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                app:srcCompat="@mipmap/ic_launcher" />
+            <TableLayout
+                android:id="@+id/Table1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TableRow>
+                    <TextView
+                        android:id="@+id/textView_CmtName"
+                        android:layout_width="325dp"
+                        android:layout_height="wrap_content"
+                        android:text="Best Comment Name"
+                        android:textColor="?attr/actionMenuTextColor"
+                        android:textSize="20sp" />
+                </TableRow>
+                <TableRow>
+
+                    <TextView
+                        android:id="@+id/textView_Comment"
+                        android:layout_width="325dp"
+                        android:layout_height="wrap_content"
+                        android:text="Best Comment"
+                        android:textColor="?attr/actionMenuTextColor"
+                        android:textSize="17sp" />
+
+                </TableRow>
+            </TableLayout>
+        </TableRow>
+    </TableLayout>
+    <!--<ImageView-->
+        <!--android:id="@+id/imageView_CmtIcon"-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_marginLeft="5dp"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:layout_marginRight="5dp"-->
+        <!--app:srcCompat="@mipmap/ic_launcher" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/textView_CmtName"-->
+        <!--android:layout_width="325dp"-->
+        <!--android:layout_height="25dp"-->
+        <!--android:layout_above="@+id/textView_Comment"-->
+        <!--android:layout_marginLeft="5dp"-->
+        <!--android:layout_marginRight="5dp"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:layout_toRightOf="@+id/imageView_CmtIcon"-->
+        <!--android:text=" Comment Name"-->
+        <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+        <!--android:textSize="20sp" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/textView_Comment"-->
+        <!--android:layout_width="325dp"-->
+        <!--android:layout_height="20dp"-->
+        <!--android:layout_alignStart="@+id/textView_CmtName"-->
+        <!--android:layout_alignLeft="@+id/textView_CmtName"-->
+        <!--android:layout_alignBottom="@+id/imageView_CmtIcon"-->
+        <!--android:text=" Comment"-->
+        <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+        <!--android:textColor="@android:color/black"-->
+        <!--android:textSize="18sp" />-->
+
+</RelativeLayout>
