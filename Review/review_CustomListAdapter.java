@@ -53,21 +53,21 @@ public class review_CustomListAdapter  extends BaseAdapter {
         review_comment country = this.listData.get(position);
         holder.commentNameView.setText(country.getCommentName());
         holder.commentView.setText(country.getComment());
-        //int imageId = this.getMipmapResIdByName(country.getIconName());
-        //holder.iconView.setImageResource(imageId);
+        int imageId = this.getMipmapResIdByName(country.getIconName());
+        holder.iconView.setImageResource(imageId);
 
         return convertView;
     }
 
-    // Tìm ID của Image ứng với tên của ảnh (Trong thư mục mipmap).
-//    public int getMipmapResIdByName(String resName)  {
-//        String pkgName = context.getPackageName();
-//
-//        // Trả về 0 nếu không tìm thấy.
-//        int resID = context.getResources().getIdentifier(resName , "mipmap", pkgName);
-//        Log.i("CustomListView", "Res Name: "+ resName+"==> Res ID = "+ resID);
-//        return resID;
-//    }
+     //Tìm ID của Image ứng với tên của ảnh (Trong thư mục mipmap).
+    public int getMipmapResIdByName(String resName)  {
+        String pkgName = context.getPackageName();
+
+        // Trả về 0 nếu không tìm thấy.
+        int resID = context.getResources().getIdentifier(resName , "mipmap", pkgName);
+        Log.i("CustomListView", "Res Name: "+ resName+"==> Res ID = "+ resID);
+        return resID;
+    }
 
     static class ViewHolder {
         ImageView iconView;

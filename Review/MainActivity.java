@@ -1,5 +1,12 @@
-﻿import android.app.Activity;
+package com.example.review1;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -14,19 +21,47 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReviewActivity extends Activity {
+public class MainActivity extends Activity {
 
+    private Dialog AddCmtDialog;
+    private RatingBar ratingBarOld;
+    private TextView txtRatingAvg;
+    private Button btnAddYourCmt;
     private RatingBar ratingBar;
     private TextView txtRatingValue;
+    private EditText txtComment;
+    private Button btnAddComment;
 
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_review);
+        setContentView(R.layout.activity_main);
 
-        addListenerOnRatingBar();
+        ratingBarOld = (RatingBar) findViewById(R.id.ratingBarOld);
+        ratingBarOld.setRating(4.5f);
+        txtRatingAvg = (TextView)findViewById(R.id.textview_RateAvg) ;
+        txtRatingAvg.setText(String.valueOf(4.5f));
+        btnAddYourCmt = (Button)findViewById(R.id.button_AddYourCmt);
+        btnAddYourCmt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddCmtDialog = new Dialog(MainActivity.this);
+                AddCmtDialog.setTitle("Đánh giá của bạn");
+                AddCmtDialog.setContentView(R.layout.add_review);
+                AddCmtDialog.setCancelable(true);
+                ratingBar = (RatingBar)AddCmtDialog.findViewById(R.id.ratingBar);
+                addListenerOnRatingBar();
+
+                txtRatingValue = (TextView) AddCmtDialog.findViewById(R.id.textview_RatingValue);
+                txtComment = (EditText)AddCmtDialog.findViewById(R.id.edit_Comment);
+                btnAddComment = (Button)AddCmtDialog.findViewById(R.id.button_AddComment) ;
+                //show dialog
+                AddCmtDialog.show();
+            }
+        });
+
         List<review_comment> image_details = getListData();
         final ListView listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(new review_CustomListAdapter(this, image_details));
@@ -38,33 +73,31 @@ public class ReviewActivity extends Activity {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 Object o = listView.getItemAtPosition(position);
                 review_comment review_cmt = (review_comment) o;
-                Toast.makeText(ReviewActivity.this, "Selected :" + " " + review_cmt, Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Selected :" + " " + review_cmt, Toast.LENGTH_LONG).show();
             }
         });
     }
-
     public void addListenerOnRatingBar() {
 
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
-        txtRatingValue = (TextView) findViewById(R.id.textview_RatingValue);
 
         //if rating value is changed,
         //display the current rating value in the result (textview) automatically
         ratingBar.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
             public void onRatingChanged(RatingBar ratingBar, float rating,
                                         boolean fromUser) {
-
                 txtRatingValue.setText(String.valueOf(rating));
-
+                // biến lưu rating
+                float getrating = ratingBar.getRating();
             }
         });
     }
-    //lấy dữ liệu (tạm thời)
+
+    //lấy dữ liệu listview(tạm thời)
     private  List<review_comment> getListData() {
         List<review_comment> list = new ArrayList<review_comment>();
-        review_comment cmt1 = new review_comment("Person1", "", "Đẹp kinh khủng khiếp, chắc có lẽ mình phải đi thử một lần. Là một người thích đi du lịch, tại sao đến bây giờ mình mới được biết một nơi đẹp như thế này nhỉ. Trời đất dung hoa, vạn vật sinh sôi, người dân nơi đây thì cực kỳ thân thiện và hiếu khách.");
-        review_comment cmt2 = new review_comment("Person2", "", "Đẹp dã man");
-        review_comment cmt3 = new review_comment("Person3", "", "Đáng để bỏ tiền đi tham quan một lần");
+        review_comment cmt1 = new review_comment("Person1", "ps1", "Đẹp kinh khủng khiếp, chắc có lẽ mình phải đi thử một lần. Là một người thích đi du lịch, tại sao đến bây giờ mình mới được biết một nơi đẹp như thế này nhỉ. Trời đất dung hoa, vạn vật sinh sôi, người dân nơi đây thì cực kỳ thân thiện và hiếu khách.");
+        review_comment cmt2 = new review_comment("Person2", "ps1", "Đẹp dã man");
+        review_comment cmt3 = new review_comment("Person3", "ps1", "Đáng để bỏ tiền đi tham quan một lần");
         review_comment cmt4 = new review_comment("Person4", "", "Sao không ai chỉ mình đi sớm hơn nhỉ. Quá tuyệt vời");
         review_comment cmt5 = new review_comment("Person5", "", "Đẹp kinh khủng khiếp, chắc có lẽ mình phải đi thử một lần");
         review_comment cmt6 = new review_comment("Person6", "", "Đẹp kinh khủng khiếp, chắc có lẽ mình phải đi thử một lần");
