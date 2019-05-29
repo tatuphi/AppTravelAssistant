@@ -1,4 +1,4 @@
-package com.example.review1;
+﻿package com.example.review1;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -21,7 +21,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class ReviewActivity extends Activity {
 
     private Dialog AddCmtDialog;
     private RatingBar ratingBarOld;
@@ -37,7 +37,7 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_review);
 
         ratingBarOld = (RatingBar) findViewById(R.id.ratingBarOld);
         ratingBarOld.setRating(4.5f);
@@ -47,7 +47,7 @@ public class MainActivity extends Activity {
         btnAddYourCmt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddCmtDialog = new Dialog(MainActivity.this);
+                AddCmtDialog = new Dialog(ReviewActivity.this);
                 AddCmtDialog.setTitle("Đánh giá của bạn");
                 AddCmtDialog.setContentView(R.layout.add_review);
                 AddCmtDialog.setCancelable(true);
@@ -73,7 +73,7 @@ public class MainActivity extends Activity {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 Object o = listView.getItemAtPosition(position);
                 review_comment review_cmt = (review_comment) o;
-                Toast.makeText(MainActivity.this, "Selected :" + " " + review_cmt, Toast.LENGTH_LONG).show();
+                Toast.makeText(ReviewActivity.this, "Selected :" + " " + review_cmt, Toast.LENGTH_LONG).show();
             }
         });
     }
