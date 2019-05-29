@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">m</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="msg_permission_denied">Bị chặn quyền truy cập!</string>
+    <string name="dlg_location_permission_needed_title">Cần quyền truy cập Location</string>
+    <string name="dlg_msg_location_permission_needed">This app needs the Location permission, please accept to use location functionality</string>
+    <string name="agree_btn_text">Đồng ý</string>
+    <string name="title_activity_newplace">Map</string>
+    <string name="empty_description">No description available.</string>
+</resources>
