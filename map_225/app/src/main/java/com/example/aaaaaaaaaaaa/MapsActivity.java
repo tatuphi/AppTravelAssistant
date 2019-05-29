@@ -30,6 +30,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -54,7 +55,7 @@ public class MapsActivity extends FragmentActivity
     ArrayAdapter<String> Countryadapter;
     private final LatLng mDefaultLocation = new LatLng(10.762622, 106.660172);
 
-    ArrayList<String> COUNTRIES;
+    ArrayList<String> PLACES;
     ArrayList<Double> LATITUDE;
     ArrayList<Double> LONGTITUDE;
     ArrayList<String> POPPULATION;
@@ -88,25 +89,25 @@ public class MapsActivity extends FragmentActivity
     }
 
     private void getData() {
-        COUNTRIES = new ArrayList<String>();
+        PLACES = new ArrayList<String>();
         LATITUDE = new ArrayList<Double>();
         LONGTITUDE = new ArrayList<Double>();
         POPPULATION = new ArrayList<String>();
 
-        COUNTRIES.add("Hà Nội");
-        COUNTRIES.add("TP.HCM");
-        COUNTRIES.add("Đà Nãng");
-        COUNTRIES.add("Huế");
-        COUNTRIES.add("Đà Lạt");
+        PLACES.add("Hà Nội");
+        PLACES.add("TP.HCM");
+        PLACES.add("Đà Nãng");
+        PLACES.add("Huế");
+        PLACES.add("Đà Lạt");
 
         Countryadapter = new ArrayAdapter(MapsActivity.this,
-                android.R.layout.simple_list_item_1, COUNTRIES);
+                android.R.layout.simple_list_item_1, PLACES);
 
         LATITUDE.add(21.0);
         LATITUDE.add(10.81667);
         LATITUDE.add(16.08333);
         LATITUDE.add(16.46667);
-        LATITUDE.add(108.43833);
+        LATITUDE.add(11.94167);
 
         LONGTITUDE.add(105.75);
         LONGTITUDE.add(106.63333);
@@ -135,7 +136,23 @@ public class MapsActivity extends FragmentActivity
     private void hideSoftKeyboard() {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
+    private void getAllMarker(){
+        for (int i = 0; i < 5; i++) {
 
+              LatLng latLng = new LatLng(LATITUDE.get(i), LONGTITUDE.get(i));
+
+                Marker marker = mMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title(PLACES.get(i))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_icon))
+                        .snippet("Population: " + POPPULATION.get(i))
+                );
+
+                marker.hideInfoWindow();
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5));
+
+        }
+    }
     //click on autocomplete textview
     private AdapterView.OnItemClickListener mAutocompleteClickListener = new AdapterView.OnItemClickListener() {
         @Override
@@ -145,14 +162,15 @@ public class MapsActivity extends FragmentActivity
 
             if (input != null || !input.equals("")) {
                 for (int k = 0; k < 5; k++) {
-                    if (input == COUNTRIES.get(k)) {
-                        Toast.makeText(MapsActivity.this, "Đã chọn "+COUNTRIES.get(k).toString(), Toast.LENGTH_LONG).show();
+                    if (input == PLACES.get(k)) {
+                        Toast.makeText(MapsActivity.this, "Đã chọn "+PLACES.get(k).toString(), Toast.LENGTH_LONG).show();
 
                         LatLng latLng = new LatLng(LATITUDE.get(k), LONGTITUDE.get(k));
                         //infowindow
                         Marker marker = mMap.addMarker(new MarkerOptions()
                                 .position(latLng)
                                 .title(input)
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_icon))
                                 .snippet("Population: " + POPPULATION.get(k))
                         );
 
@@ -189,7 +207,7 @@ public class MapsActivity extends FragmentActivity
         mLocationRequest.setInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, 15));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, 5));
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
@@ -217,6 +235,7 @@ public class MapsActivity extends FragmentActivity
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
             layoutParams.setMargins(0, 180, 180, 0);
         }
+        getAllMarker();
     }
 
 
@@ -247,7 +266,7 @@ public class MapsActivity extends FragmentActivity
 
 
                 //move map camera
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,5));
             }
         }
     };

@@ -5,7 +5,7 @@
     android:id="@+id/scroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg">
+  >
     <LinearLayout
         android:id="@+id/relLayout1"
         android:layout_width="match_parent"
@@ -71,6 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
+                android:imeOptions="actionNext"
                 android:hint="Name"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -95,6 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
+                android:imeOptions="actionNext"
                 android:hint="Description"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -175,6 +177,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:imeOptions="actionSend"
                 android:hint="More infomation"
                 android:inputType="textPersonName|textMultiLine"
                 android:maxLines="6"

@@ -16,8 +16,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -126,6 +128,9 @@ public class NewPlaceActivity extends FragmentActivity
             }
         });
         mapFrag.getMapAsync(this);
+//        txtName.setOnEditorActionListener(editorListener);
+//        txtDes.setOnEditorActionListener(editorListener);
+//        txtMore.setOnEditorActionListener(editorListener);
         txtName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,38 +172,51 @@ public class NewPlaceActivity extends FragmentActivity
         });
     }
 
-
-
-
-    private void getLatLng() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        mFusedLocationClient.getLastLocation().addOnSuccessListener(NewPlaceActivity.this, new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    LatLng latLng =mCurrLocationMarker.getPosition();
-                    String lat = String.valueOf(latLng.latitude);
-                    String lng = String.valueOf(latLng.longitude);
-                    lbLat.setText(lat);
-                    lbLong.setText(lng);
 //
-//                    String lat = String.valueOf(location.getLatitude());
-//                    String lng = String.valueOf(location.getLongitude());
-
-                }
-            }
-        });
-
-    }
+//    private TextView.OnEditorActionListener editorListener = new TextView.OnEditorActionListener() {
+//        @Override
+//        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//            switch (actionId) {
+//                case EditorInfo.IME_ACTION_NEXT:
+//                    Toast.makeText(NewPlaceActivity.this, "Next", Toast.LENGTH_LONG).show();
+//                    break;
+//                case EditorInfo.IME_ACTION_SEND:
+//                    Toast.makeText(NewPlaceActivity.this, "Send", Toast.LENGTH_LONG).show();
+//                    break;
+//            }
+//            return false;
+//        }
+//    };
+//
+//    private void getLatLng() {
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            return;
+//        }
+//        mFusedLocationClient.getLastLocation().addOnSuccessListener(NewPlaceActivity.this, new OnSuccessListener<Location>() {
+//            @Override
+//            public void onSuccess(Location location) {
+//                if (location != null) {
+//                    LatLng latLng =mCurrLocationMarker.getPosition();
+//                    String lat = String.valueOf(latLng.latitude);
+//                    String lng = String.valueOf(latLng.longitude);
+//                    lbLat.setText(lat);
+//                    lbLong.setText(lng);
+////
+////                    String lat = String.valueOf(location.getLatitude());
+////                    String lng = String.valueOf(location.getLongitude());
+//
+//                }
+//            }
+//        });
+//
+//    }
     //info marker click
     @Override
     public void onInfoWindowClick(Marker marker) {

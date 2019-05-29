@@ -36,7 +36,7 @@
             android:completionHint="Type a place..."
             android:completionThreshold="1"
             android:dropDownAnchor="@id/actv"
-            android:hint="Select a country"
+            android:hint="Select a place"
 
             android:imeOptions="actionSearch"/>
 
