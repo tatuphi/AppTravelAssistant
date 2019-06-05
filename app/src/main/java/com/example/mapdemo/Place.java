@@ -3,13 +3,13 @@ package com.example.mapdemo;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Location{
+public class Place{
     public String id;
     public String name, city;
     public double rate;
-    public Location() {
+    public Place() {
     }
-    public Location(String ID, String name, String city, Double rate){
+    public Place(String ID, String name, String city, Double rate){
         this.id = ID;
         this.city = city;
         this.name = name;

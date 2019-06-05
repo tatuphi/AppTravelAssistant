@@ -7,19 +7,37 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Home extends AppCompatActivity {
     Integer userID;
-
+    Review lc;
+    FirebaseAuth auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Get userID from Intent that invoke
-        Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            userID = extras.getInt("USER");
+        //
+        DBHelper db = new DBHelper();
+        db.ConnectToFirebase();
+
+        // init Authenticator
+        auth =FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+        if (user == null){
+            Intent intent= new Intent(Home.this, LoginActivity.class);
+            startActivity(intent);
+//            Toast.makeText(this, "user no null", Toast.LENGTH_LONG).show();
+            finish();
         }
 
+
+
+       //====================================
 
         setContentView(R.layout.activity_home);
         LinearLayout checklist =(LinearLayout)findViewById(R.id.lnCheckList);
@@ -29,7 +47,6 @@ public class Home extends AppCompatActivity {
                 Intent intent= new Intent(Home.this, ChecklistActivity.class);
                 intent.putExtra("USER", userID);
                 startActivity(intent);
-//                finish();
             }
         });
 
@@ -40,7 +57,6 @@ public class Home extends AppCompatActivity {
                 Intent intent= new Intent(Home.this, DiaryActivity.class);
                 intent.putExtra("USER", "dinhnn");
                 startActivity(intent);
-//                finish();
             }
         });
 
@@ -50,12 +66,54 @@ public class Home extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent= new Intent(Home.this, WeatherActivity.class);
                 startActivity(intent);
-//                finish();
-
-
             }
         });
+        LinearLayout logOut =(LinearLayout)findViewById(R.id.lnLogOut);
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth.signOut();
+                Intent intent = new Intent(Home.this, LoginActivity.class);
+                startActivity(intent);
+                Toast.makeText(Home.this,"Signed OUT", Toast.LENGTH_LONG).show();
+                finish();
+            }
+        });
+        LinearLayout nearBy =(LinearLayout)findViewById(R.id.lnNearbyServices);
+        nearBy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(Home.this, NewPlaceActivity.class);
+                startActivity(intent);
+            }
+        });
+        LinearLayout addNew =(LinearLayout)findViewById(R.id.lnAddNewPlace);
+        addNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(Home.this, NewPlaceActivity.class);
+                startActivity(intent);
+            }
+        });
+        if (lc != null){
+        Toast.makeText(this, lc.content, Toast.LENGTH_LONG).show();}
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (lc != null){
+            Toast.makeText(this, lc.content, Toast.LENGTH_LONG).show();}
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (lc != null){
+            Toast.makeText(this, lc.content, Toast.LENGTH_LONG).show();}
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -71,7 +129,6 @@ public class Home extends AppCompatActivity {
                 PreferenceUtils.savePassword(null, this);
                 PreferenceUtils.saveEmail(null, this);
                 intent = new Intent(this, UsersActivity.class);
-                intent.putExtra("USER", userID);
                 startActivity(intent);
 //                finish();
                 break;
@@ -91,6 +148,30 @@ public class Home extends AppCompatActivity {
                 intent = new Intent(this, WeatherActivity.class);
                 startActivity(intent);
 //                finish();
+                break;
+            case R.id.lnNearbyServices :
+//                intent = new Intent(this, WeatherActivity.class);
+//                startActivity(intent);
+//                finish();
+                Toast.makeText(this, "Nearby Services", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.lnAddNewPlace :
+//                intent = new Intent(this, WeatherActivity.class);
+//                startActivity(intent);
+//                finish();
+                Toast.makeText(this, "New Place", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.lnDestinationList :
+//                intent = new Intent(this, WeatherActivity.class);
+//                startActivity(intent);
+//                finish();
+                Toast.makeText(this, "Destination List", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.lnLogOut :
+//                intent = new Intent(this, WeatherActivity.class);
+//                startActivity(intent);
+//                finish();
+
                 break;
 
         }

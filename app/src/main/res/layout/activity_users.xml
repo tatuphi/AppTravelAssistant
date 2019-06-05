@@ -20,15 +20,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <SearchView
-            android:id="@+id/mySearchView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Spacecrafts Searcher"
-            android:padding="5dp"
-            android:queryHint="Search.."
-            android:textAlignment="center" />
-
         <ProgressBar
             android:id="@+id/myProgressBar"
             style="?android:attr/progressBarStyleHorizontal"
@@ -37,13 +28,51 @@
             android:indeterminate="true"
             android:indeterminateBehavior="cycle"
             android:visibility="gone" />
-
-        <ListView
-            android:id="@+id/myListView"
-            android:layout_weight="0.5"
-            android:numColumns="auto_fit"
+        <RelativeLayout
+            android:id="@+id/relLayout1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/white_border"
+            android:elevation="10dp">
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:id="@+id/ic_magnify"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_magnify"/>
+
+            <AutoCompleteTextView
+                android:id="@+id/actv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/ic_magnify"
+                android:completionHint="Type a place..."
+                android:completionThreshold="1"
+
+                android:dropDownAnchor="@id/actv"
+                android:hint="Select a country"
+                android:imeOptions="actionSearch"
+                android:textColor="#000"
+
+                android:textSize="15sp" />
+
+
+
+        </RelativeLayout>
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".MapsActivity" />
+
     </LinearLayout>
 
 </LinearLayout>

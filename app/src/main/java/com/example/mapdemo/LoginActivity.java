@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -12,9 +13,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
 
@@ -22,8 +33,8 @@ import java.io.File;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
         private final AppCompatActivity activity = LoginActivity.this;
-    private Context context;
-
+        private Context context;
+        FirebaseAuth auth;
         private NestedScrollView nestedScrollView;
 
         private TextInputLayout textInputLayoutEmail;
@@ -44,13 +55,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_login);
             getSupportActionBar().hide();
-            db = new DBHelper();
-            File path = getApplication().getFilesDir();
-            db.OpenDB(path, "mapServiceDB");
-            db.createTable();
-            db.insertUser("admin", "admin", null, "0_Mua do an  ,1_Di tam",null);
-            db.insertUser("admin1", "admin1", null, null,null);
-            db.insertUser("admin2", "admin2", null, null,null);
+            auth =FirebaseAuth.getInstance();
+
             initViews();
             initListeners();
 //        initObjects();
@@ -58,7 +64,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        db.CloseDB();
+
     }
         private void initViews(){
             nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
@@ -73,16 +79,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             textViewLinkRegister = (AppCompatTextView) findViewById(R.id.textViewLinkRegister);
             textViewLinkForgotPassword = (AppCompatTextView) findViewById(R.id.forgotPassword);
-            PreferenceUtils utils = new PreferenceUtils();
 
-            if (utils.getName(this) != null ){
-                Intent intent = new Intent(LoginActivity.this, UsersActivity.class);
-                User u = db.getUser(utils.getName(this));
-                intent.putExtra("USER", u.ID);
-                startActivity(intent);
-            }else{
-
-            }
+            // AUTO LOGIN USER
+//            PreferenceUtils utils = new PreferenceUtils();
+//
+//            if (utils.getName(this) != null ){
+//                Intent intent = new Intent(LoginActivity.this, UsersActivity.class);
+//                User u = db.getUser(utils.getName(this));
+//                intent.putExtra("USER", u.ID);
+//                startActivity(intent);
+//            }else{
+//
+//            }
         }
 
         private void initListeners(){
@@ -143,26 +151,45 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             if ( !validateUsername() | !validatePassword()) {
                 return;
             }
-            String username = textInputEditTextEmail.getText().toString().trim();
+            String email = textInputEditTextEmail.getText().toString().trim();
             String password = textInputEditTextPassword.getText().toString().trim();
-            User user = db.getUser(username);
-            if (user == null){
-                emptyInputEditText();
-                return;
-            }
-            if (user.password.equals(password)) {
-                PreferenceUtils.saveEmail(username, this);
-                PreferenceUtils.savePassword(password, this);
-                Intent accountsIntent = new Intent(activity, UsersActivity.class);
-                // get userID from username
-                User u = db.getUser( textInputEditTextEmail.getText().toString().trim());
-                accountsIntent.putExtra("USER", u.ID);
-                emptyInputEditText();
-                startActivity(accountsIntent);
-                finish();
-            } else {
-                Snackbar.make(nestedScrollView, getString(R.string.error_valid_email_password), Snackbar.LENGTH_LONG).show();
-            }
+//            User user = db.getUser(email);
+//            if (user == null){
+//                emptyInputEditText();
+//                return;
+//            }
+//            if (user.password.equals(password)) {
+//                PreferenceUtils.saveEmail(email, this);
+//                PreferenceUtils.savePassword(password, this);
+//                Intent accountsIntent = new Intent(activity, UsersActivity.class);
+//                // get userID from username
+//                User u = db.getUser( textInputEditTextEmail.getText().toString().trim());
+//                accountsIntent.putExtra("USER", u.ID);
+//                emptyInputEditText();
+//                startActivity(accountsIntent);
+//                finish();
+//            } else {
+//                Snackbar.make(nestedScrollView, getString(R.string.error_valid_email_password), Snackbar.LENGTH_LONG).show();
+//            }
+            // Alternative
+            auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                FirebaseUser user = auth.getCurrentUser();
+                                Intent accountsIntent = new Intent(activity, UsersActivity.class);
+                                Toast.makeText(LoginActivity.this, user.getUid(), Toast.LENGTH_LONG).show();
+                                emptyInputEditText();
+                                startActivity(accountsIntent);
+                                finish();
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Wrong pass or email!!!!!!", Toast.LENGTH_LONG).show();
+                                emptyInputEditText();
+                            }
+                        }
+                    });
         }
 
         private void emptyInputEditText(){

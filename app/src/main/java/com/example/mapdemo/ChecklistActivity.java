@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.SQLException;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,8 +18,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ChecklistActivity extends AppCompatActivity {
     EditText et;
@@ -32,23 +43,39 @@ public class ChecklistActivity extends AppCompatActivity {
     ArrayAdapter<String> adapter;
 
     private DBHelper db;
+    private DatabaseReference dbRef;
+    FirebaseUser user;
+
     String data = "";
-    Integer userID;
+//    Integer userID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.checklist);
 
         // get userID from Activity that invoke this one
-        Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            userID = extras.getInt("USER");
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null){
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        } else{
+            DBHelper db = new DBHelper();
+            db.ConnectToFirebase();
+            dbRef = FirebaseDatabase.getInstance().getReference();
         }
-        //DB
-        db = new DBHelper();
-        File path = getApplication().getFilesDir();
-        db.OpenDB(path, "mapServiceDB");
-        data = db.getUser(userID).checklist;
+
+        // add event listner for Checkitems
+        dbRef.child("checkitems").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                getData(dataSnapshot);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         // gang cac controls
         et = (EditText) findViewById(R.id.edit_list);
@@ -63,12 +90,26 @@ public class ChecklistActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<String>(ChecklistActivity.this, android.R.layout.simple_list_item_checked,
                 arrayList);
 
-//        load hiển thị các item dã dược lưu
+    }
+    private void getData(DataSnapshot snapshot){
+        try {
+            data = snapshot.child(user.getUid()).getValue(String.class);
+        }catch (Exception e){
+            data = "";
+        }
+        Toast.makeText(this, data, Toast.LENGTH_LONG).show();
+//        if (data == null){
+//            data = "0_";
+//        }
+        //        load hiển thị các item dã dược lưu
         String[] data1 = data.split(",");
         ListView ch=(ListView) findViewById(R.id.list_check);
-        for(int j=0;j<data1.length;j++)
-        {
-            arrayList.add(data1[j].substring(2));
+        if (data.length() > 0 && data != null){
+            for(int j=0;j<data1.length;j++)
+            {
+                arrayList.add(data1[j].substring(2));
+                selectedItems.add(data1[j].substring(0,1));
+            }
         }
         //xóa từng item duoc chon
         lv.setOnItemLongClickListener(new onRemoveItems());
@@ -76,23 +117,26 @@ public class ChecklistActivity extends AppCompatActivity {
         onBtnDelClick();
         lv.setAdapter(adapter);
 
-
     }
     @Override
     protected void onDestroy(){
         super.onDestroy();
+        try {
+
+            dbRef.child("checkitems").child(user.getUid()).setValue(data);
+        }catch (Exception e){}
+
         // Save Intances to DB First
 
-        db.CloseDB();
     }
     public void onStart(){
         super.onStart();
-
         //create an instance of ListView
         ListView chl=(ListView) findViewById(R.id.list_check);
         //set multiple selection mode
         chl.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
+        // xu li
         chl.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // selected item
@@ -105,7 +149,6 @@ public class ChecklistActivity extends AppCompatActivity {
             }
 
         });
-
     }
     //    xử lý button Add
     public void onBtnClick(){
@@ -113,8 +156,17 @@ public class ChecklistActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 String result=et.getText().toString();
+                if (result.length() <= 0 || result == null){
+                    return;
+                }
                 arrayList.add(result);
                 adapter.notifyDataSetChanged();
+                if (data.length() <= 0){
+                    data += "0_"+ result;
+                } else {
+                    data += ",0_" + result;
+                }
+                et.setText("");
             }}
         );
     }
@@ -125,6 +177,8 @@ public class ChecklistActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 arrayList.clear();
+                selectedItems.clear();
+                data="";
                 adapter.notifyDataSetChanged();
             }
         });
@@ -159,9 +213,17 @@ public class ChecklistActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     // xóa items đang nhấn giữ
                     arrayList.remove(position);
-
+                    selectedItems.remove(position);
                     //cập nhật lại listview
                     adapter.notifyDataSetChanged();
+                    //Cap nhat lai data bien toan cuc DATA
+                    Iterator<String> it = arrayList.iterator();
+                    Iterator<String> selected = selectedItems.iterator();
+                    data = "";
+                    while(it.hasNext() && selected.hasNext()) {
+                        data += selected+"_"+it.next()+",";
+                    }
+                    String temp = data;
 
                 }
             });

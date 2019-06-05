@@ -1,30 +1,33 @@
 package com.example.mapdemo;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,91 +40,57 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-//import com.google.firebase.database.core.view.View;
+import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-
-/**
- * Created by delaroy on 3/27/17.
- */
-public class UsersActivity extends AppCompatActivity
+public class NewPlaceActivity extends FragmentActivity
         implements GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener, GoogleMap.OnInfoWindowClickListener,
-        OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
-
-    // INIT For Map
+        OnMapReadyCallback {
 
     private GoogleMap mMap;
     private AutoCompleteTextView editText;
-    //    private SearchView mSearchView;
+    private EditText txtName, txtDes, txtMore;
+    private TextView lbLat, lbLong;
+    private NestedScrollView nestedScrollView;
+    private Button btnInsert, btnRemove, btnEdit;
+    private SearchView mSearchView;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationRequest mLocationRequest;
     private Location mLastLocation;
     private Marker mCurrLocationMarker;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     View mapView;
-    ArrayAdapter<String> Countryadapter;
+
     private final LatLng mDefaultLocation = new LatLng(10.762622, 106.660172);
 
-    ArrayList<String> PLACES;
-    ArrayList<Double> LATITUDE;
-    ArrayList<Double> LONGTITUDE;
-    ArrayList<String> POPPULATION;
-
-    FirebaseAuth auth;
 
 
     private static final String TAG = "MapActivity";
-    //private boolean mLocationPermissionGranted = fals
+    //private boolean mLocationPermissionGranted = false;
 
-
-    private Integer userID;
-    private TextView textViewName;
-    String[] listviewTitle = new String[]{
-            "Hồ Chí Minh", "Hà Nội", "Đã Nẵng", "Nha Trang",
-            "Cần Thơ", "Phan Thiết", "Hội An", "Đà Lạt",
-    };
-
-
-    int[] listviewImage = new int[]{
-            R.drawable.hochiminh, R.drawable.hanoi, R.drawable.danang, R.drawable.nhatrang,
-            R.drawable.cantho, R.drawable.phanthiet, R.drawable.hoian, R.drawable.dalat,
-    };
-
-    String[] listviewShortDescription = new String[]{
-            "Android ListView Short Description", "Android ListView Short Description", "Android ListView Short Description", "Android ListView Short Description",
-            "Android ListView Short Description", "Android ListView Short Description", "Android ListView Short Description", "Android ListView Short Description",
-    };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // get userID from Default
-        // init Authenticator
-        auth = FirebaseAuth.getInstance();
-        FirebaseUser user = auth.getCurrentUser();
-        if (user == null){
-            Intent intent= new Intent(UsersActivity.this, LoginActivity.class);
-            startActivity(intent);
-//            Toast.makeText(this, "user no null", Toast.LENGTH_LONG).show();
-            finish();
-        }
-        setContentView(R.layout.activity_users);
+        setContentView(R.layout.activity_new_place);
 
-        editText = findViewById(R.id.actv);
-
-        getData();
-        editText.setOnItemClickListener(mAutocompleteClickListener);
-        editText.setAdapter(Countryadapter);
+//        editText = findViewById(R.id.actv);
+        mSearchView =findViewById(R.id.sv_location);
+        txtName = findViewById(R.id.txtName);
+        txtDes = findViewById(R.id.txtDes);
+        txtMore = findViewById(R.id.txtMore);
+        lbLat = findViewById(R.id.lbLattitude);
+        lbLong = findViewById(R.id.lbLongtitude);
+        btnInsert= findViewById(R.id.btnInsert);
+        btnRemove = findViewById(R.id.btnRemove);
+        btnEdit = findViewById(R.id.btnEdit);
+        nestedScrollView = findViewById(R.id.scroll);
 
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -131,91 +100,122 @@ public class UsersActivity extends AppCompatActivity
         mapView = mapFrag.getView();
         mapFrag.getMapAsync(this);
         checkLocationPermission();
-
         mapFrag.getMapAsync(this);
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                String location = mSearchView.getQuery().toString();
+                List<Address> addressList = null;
+                if (location!=null||location.equals("")){
+                    Geocoder geocoder = new Geocoder(NewPlaceActivity.this);
+                    try {
+                        addressList=geocoder.getFromLocationName(location,1);
+                    } catch (IOException e){
+                        e.printStackTrace();
+                    }
+                    Address address = addressList.get(0);
+                    LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
+                    mMap.addMarker(new MarkerOptions().position(latLng).title(location));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+                }
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        mapFrag.getMapAsync(this);
+//        txtName.setOnEditorActionListener(editorListener);
+//        txtDes.setOnEditorActionListener(editorListener);
+//        txtMore.setOnEditorActionListener(editorListener);
+        txtName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nestedScrollView.fullScroll(View.FOCUS_DOWN);
+//                getLatLng();
+            }
+        });
+        btnInsert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//              txtName.getText().toString(),txtDes.getText().toString(),txtMore.getText().toString(),lbLat.getText(),lbLong.getText();
+                Toast.makeText(NewPlaceActivity.this, "Thêm place thành công!!", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        //xoa diary
+        btnRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtName.getText().clear();
+                txtDes.getText().clear();
+                txtMore.getText().clear();
+                lbLat.setText("Latitude");
+                lbLong.setText("Longtitude");
+
+                Toast.makeText(NewPlaceActivity.this, "Xóa Place thành công!!", Toast.LENGTH_LONG).show();
+//              txtName.getText().toString(),txtDes.getText().toString(),txtMore.getText().toString(),lbLat.getText(),lbLong.getText();
+
+            }
+        });
+        //sua diary
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(NewPlaceActivity.this, "Cập Nhật Place thành công!!", Toast.LENGTH_LONG).show();
+//              txtName.getText().toString(),txtDes.getText().toString(),txtMore.getText().toString(),lbLat.getText(),lbLong.getText();
+
+            }
+        });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent;
-        switch (item.getItemId()) {
-
-            case R.id.action_menu:
-                Intent i = new Intent(this, Home.class);
-                startActivity(i);
-//                finish();
-                return true;
-
-    }
-        return super.onOptionsItemSelected(item);
-    }
-    private void getAllMarker(){
-        for (int i = 0; i < 5; i++) {
-
-            LatLng latLng = new LatLng(LATITUDE.get(i), LONGTITUDE.get(i));
-
-            Marker marker = mMap.addMarker(new MarkerOptions()
-                    .position(latLng)
-                    .title(PLACES.get(i))
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_icon))
-                    .snippet("Population: " + POPPULATION.get(i))
-            );
-
-            marker.hideInfoWindow();
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5));
-
-        }
-    }
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        return true;
-    }
-
-    private void getData() {
-        PLACES = new ArrayList<String>();
-        LATITUDE = new ArrayList<Double>();
-        LONGTITUDE = new ArrayList<Double>();
-        POPPULATION = new ArrayList<String>();
-
-        PLACES.add("Hà Nội");
-        PLACES.add("TP.HCM");
-        PLACES.add("Đà Nãng");
-        PLACES.add("Huế");
-        PLACES.add("Đà Lạt");
-
-        Countryadapter = new ArrayAdapter(UsersActivity.this,
-                android.R.layout.simple_list_item_1, PLACES);
-
-        LATITUDE.add(21.0);
-        LATITUDE.add(10.81667);
-        LATITUDE.add(16.08333);
-        LATITUDE.add(16.46667);
-        LATITUDE.add(108.43833);
-
-        LONGTITUDE.add(105.75);
-        LONGTITUDE.add(106.63333);
-        LONGTITUDE.add(108.08333);
-        LONGTITUDE.add(107.58333);
-        LONGTITUDE.add(108.43833);
-
-        POPPULATION.add("6.844.100");
-        POPPULATION.add("8.297.500");
-        POPPULATION.add("1.215.000");
-        POPPULATION.add("455.230");
-        POPPULATION.add("406.105");
-
-
-    }
-
-
+    //
+//    private TextView.OnEditorActionListener editorListener = new TextView.OnEditorActionListener() {
+//        @Override
+//        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//            switch (actionId) {
+//                case EditorInfo.IME_ACTION_NEXT:
+//                    Toast.makeText(NewPlaceActivity.this, "Next", Toast.LENGTH_LONG).show();
+//                    break;
+//                case EditorInfo.IME_ACTION_SEND:
+//                    Toast.makeText(NewPlaceActivity.this, "Send", Toast.LENGTH_LONG).show();
+//                    break;
+//            }
+//            return false;
+//        }
+//    };
+//
+//    private void getLatLng() {
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            return;
+//        }
+//        mFusedLocationClient.getLastLocation().addOnSuccessListener(NewPlaceActivity.this, new OnSuccessListener<Location>() {
+//            @Override
+//            public void onSuccess(Location location) {
+//                if (location != null) {
+//                    LatLng latLng =mCurrLocationMarker.getPosition();
+//                    String lat = String.valueOf(latLng.latitude);
+//                    String lng = String.valueOf(latLng.longitude);
+//                    lbLat.setText(lat);
+//                    lbLong.setText(lng);
+////
+////                    String lat = String.valueOf(location.getLatitude());
+////                    String lng = String.valueOf(location.getLongitude());
+//
+//                }
+//            }
+//        });
+//
+//    }
     //info marker click
     @Override
     public void onInfoWindowClick(Marker marker) {
@@ -224,64 +224,47 @@ public class UsersActivity extends AppCompatActivity
         //do something
     }
 
-    private void hideSoftKeyboard() {
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-    }
-
-    //click on autocomplete textview
-    private AdapterView.OnItemClickListener mAutocompleteClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            hideSoftKeyboard();
-            String input = Countryadapter.getItem(i);
-
-            if (input != null || !input.equals("")) {
-                for (int k = 0; k < 5; k++) {
-                    if (input == PLACES.get(k)) {
-                        Toast.makeText(UsersActivity.this, "Đã chọn "+PLACES.get(k).toString(), Toast.LENGTH_LONG).show();
-
-                        LatLng latLng = new LatLng(LATITUDE.get(k), LONGTITUDE.get(k));
-                        //infowindow
-                        Marker marker = mMap.addMarker(new MarkerOptions()
-                                .position(latLng)
-                                .title(input)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_icon))
-                                .snippet("Population: " + POPPULATION.get(k))
-                        );
-
-                        marker.hideInfoWindow();
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
-                    }
-
-                }
-
-            }
-        }
-    };
 
     @Override
     public boolean onMyLocationButtonClick() {
         Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
         // Return false so that we don't consume the event and the default behavior still occurs
         // (the camera animates to the user's current position).
+
         return false;
     }
 
     @Override
     public void onMyLocationClick(@NonNull Location location) {
         Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
+
     }
 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
         mMap = googleMap;
         mMap.setOnInfoWindowClickListener(this);
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                Toast.makeText(NewPlaceActivity.this, "Clicked!!", Toast.LENGTH_LONG).show();
+                mMap.clear();
+                mCurrLocationMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("Clicked place"));
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, 5));
+
+                String lat = String.valueOf(latLng.latitude);
+                String lng = String.valueOf(latLng.longitude);
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+                lbLat.setText(lat);
+                lbLong.setText(lng);
+            }
+        });
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, 10));
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
@@ -305,11 +288,10 @@ public class UsersActivity extends AppCompatActivity
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
                     locationButton.getLayoutParams();
             // position on right bottom
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-            layoutParams.setMargins(0, 180, 180, 0);
+//            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+//            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+//            layoutParams.setMargins(0, 180, 180, 0);
         }
-        getAllMarker();
     }
 
 
@@ -329,7 +311,7 @@ public class UsersActivity extends AppCompatActivity
             if (locationList.size() > 0) {
                 //The last location in the list is the newest
                 Location location = locationList.get(locationList.size() - 1);
-                Log.i("MapsActivity", "Location: " + location.getLatitude() + " " + location.getLongitude());
+//                Log.i("NewPlaceActivity", "Location: " + location.getLatitude() + " " + location.getLongitude());
                 mLastLocation = location;
                 if (mCurrLocationMarker != null) {
                     mCurrLocationMarker.remove();
@@ -341,6 +323,11 @@ public class UsersActivity extends AppCompatActivity
 
                 //move map camera
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+                String lat = String.valueOf(latLng.latitude);
+                String lng = String.valueOf(latLng.longitude);
+                lbLat.setText(lat);
+                lbLong.setText(lng);
             }
         }
     };
@@ -364,7 +351,7 @@ public class UsersActivity extends AppCompatActivity
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //Prompt the user once explanation has been shown
-                                ActivityCompat.requestPermissions(UsersActivity.this,
+                                ActivityCompat.requestPermissions(NewPlaceActivity.this,
                                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                         MY_PERMISSIONS_REQUEST_LOCATION);
                             }
@@ -423,3 +410,5 @@ public class UsersActivity extends AppCompatActivity
         }
     }
 }
+
+

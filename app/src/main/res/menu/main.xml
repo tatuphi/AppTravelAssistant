@@ -2,25 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
-    <item
-        android:id="@+id/log_out"
-        android:title="@string/logout"
-        app:showAsAction="never"/>
 
     <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/search"
-        android:orderInCategory="200"
-        android:title="Search"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/action_user"
-        android:icon="@drawable/login"
-        android:orderInCategory="300"
-        android:title="User"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/action_hom"
+        android:id="@+id/action_menu"
         android:icon="@drawable/menu"
         android:orderInCategory="200"
         android:title="Search"
