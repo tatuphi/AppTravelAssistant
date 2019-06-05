@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imgV"
+            android:layout_width="400dp"
+            android:layout_height="176dp"
+            app:srcCompat="@drawable/photo"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="31dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/lnFriend"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:orientation="horizontal"
+                android:padding="20dp"
+                tools:targetApi="lollipop">
+
+                <ImageView
+                    android:id="@+id/imgFriend"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/friendicon" />
+
+                <TextView
+                    android:id="@+id/lbFriend"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:text="Bạn bè"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lnPlaces"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:orientation="horizontal"
+                android:padding="20dp"
+                tools:targetApi="lollipop">
+
+                <ImageView
+                    android:id="@+id/imgPlaces"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_location_city_black" />
+
+                <TextView
+                    android:id="@+id/lbPlaces"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:text="Địa điểm"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/lnCost"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:orientation="horizontal"
+                android:padding="20dp"
+                tools:targetApi="lollipop">
+
+                <ImageView
+                    android:id="@+id/imgCost"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/walleticon" />
+
+                <EditText
+                    android:id="@+id/txtCost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:inputType="number"
+                    android:hint="Chi phí"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lnTimer"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.0"
+                android:backgroundTint="@color/black"
+                android:orientation="horizontal"
+                android:padding="20dp"
+                tools:targetApi="lollipop">
+
+                <ImageView
+                    android:id="@+id/imgTime"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/empty_description"
+                    app:srcCompat="@drawable/calendar" />
+
+                <TextView
+                    android:id="@+id/lbTime"
+                    android:layout_width="138dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:hint="Thời gian"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/txtNote"
+                android:layout_width="398dp"
+                android:layout_height="match_parent"
+                android:ems="10"
+                android:hint="Text of diary"
+                android:inputType="textPersonName"
+                tools:layout_editor_absoluteX="23dp"
+                tools:layout_editor_absoluteY="412dp" />
+        </LinearLayout>
+        <TableLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/Buttons"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:stretchColumns="1,2,3"
+            android:padding="6dp" >
+            <TableRow>
+                <Button
+                    android:id="@+id/btnInsert"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:text="Thêm" />
+                <Button
+                    android:id="@+id/btnRemove"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Xóa" />
+                <Button
+                    android:id="@+id/btnEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Sửa" />
+
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

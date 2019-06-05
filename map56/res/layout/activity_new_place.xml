@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        android:id="@+id/relLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <SearchView
+                android:id="@+id/sv_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:queryHint="Search..."
+                android:iconifiedByDefault="false"
+                android:layout_margin="10dp"
+                android:elevation="5dp"
+                android:background="@drawable/white_border"
+                />
+        </RelativeLayout>
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            tools:context=".NewPlaceActivity" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/lbTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:textColorHint="@android:color/holo_red_light"
+                android:hint="ADD NEW PLACE"
+                android:textStyle="bold"
+                android:textSize="20sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/lbName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:textColorHint="@android:color/holo_red_light"
+                android:hint="Name"
+                android:textSize="12sp" />
+            <EditText
+                android:id="@+id/txtName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:imeOptions="actionNext"
+                android:hint="Name"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/lbDes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:textColorHint="@android:color/holo_red_light"
+                android:hint="Description"
+                android:textSize="12sp" />
+            <EditText
+                android:id="@+id/txtDes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:imeOptions="actionNext"
+                android:hint="Description"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/lnCost"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                tools:targetApi="lollipop">
+                <TextView
+                    android:id="@+id/lbLat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="0dp"
+                    android:textColorHint="@android:color/holo_red_light"
+                    android:hint="Lat"
+                    android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/lbLattitude"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:hint="Lattitude"
+                    android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/lbLng"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="0dp"
+                    android:hint="Lng"
+                    android:textColorHint="@android:color/holo_red_light"
+                    android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/lbLongtitude"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:hint="Longtitude"
+                    android:textSize="15sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/lbMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:textColorHint="@android:color/holo_red_light"
+                android:hint="More"
+                android:textSize="20sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/layoutNote"
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+            <EditText
+                android:id="@+id/txtMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:imeOptions="actionSend"
+                android:hint="More infomation"
+                android:inputType="textPersonName|textMultiLine"
+                android:maxLines="6"
+                android:minLines="1"
+                tools:layout_editor_absoluteX="23dp"
+                tools:layout_editor_absoluteY="412dp" />
+        </LinearLayout>
+
+        <TableLayout
+            android:id="@+id/Buttons"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="6dp"
+            android:stretchColumns="1,2,3">
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/btnInsert"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:text="Thêm" />
+
+                <Button
+                    android:id="@+id/btnRemove"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Xóa" />
+
+                <Button
+                    android:id="@+id/btnEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Sửa" />
+
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>
