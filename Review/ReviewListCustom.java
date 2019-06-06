@@ -1,4 +1,4 @@
-package com.example.review1;
+package com.example.mapdemo;
 
 import android.content.Context;
 import android.util.Log;
@@ -10,13 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.List;
 
-public class review_CustomListAdapter  extends BaseAdapter {
+public class ReviewListCustom extends BaseAdapter {
 
-    private List<review_comment> listData;
+    private List<Review> listData;
     private LayoutInflater layoutInflater;
     private Context context;
 
-    public review_CustomListAdapter(Context aContext,  List<review_comment> listData) {
+    public ReviewListCustom(Context aContext,  List<Review> listData) {
         this.context = aContext;
         this.listData = listData;
         layoutInflater = LayoutInflater.from(aContext);
@@ -50,16 +50,16 @@ public class review_CustomListAdapter  extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        review_comment country = this.listData.get(position);
-        holder.commentNameView.setText(country.getCommentName());
-        holder.commentView.setText(country.getComment());
-        int imageId = this.getMipmapResIdByName(country.getIconName());
+        Review comment = this.listData.get(position);
+        holder.commentNameView.setText(comment.getCommentName());
+        holder.commentView.setText(comment.getComment());
+        int imageId = this.getMipmapResIdByName(comment.getIconName());
         holder.iconView.setImageResource(imageId);
 
         return convertView;
     }
 
-     //Tìm ID của Image ứng với tên của ảnh (Trong thư mục mipmap).
+    //Tìm ID của Image ứng với tên của ảnh (Trong thư mục mipmap).
     public int getMipmapResIdByName(String resName)  {
         String pkgName = context.getPackageName();
 
@@ -74,5 +74,4 @@ public class review_CustomListAdapter  extends BaseAdapter {
         TextView commentNameView;
         TextView commentView;
     }
-
 }

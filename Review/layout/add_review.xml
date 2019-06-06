@@ -8,39 +8,41 @@
     android:layout_width="320dp"
     android:paddingTop="10dp">
     <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/myTableLayout2"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="6dp">
+        android:id="@+id/myTableLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="6dp">
 
-    <TableRow>
-    <TextView
-    android:id="@+id/textview_RatingValue"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:padding="5dp"
-    android:text="5.0"
-    android:textAppearance="?android:attr/textAppearanceMedium"
-    android:textSize="30sp" />
+        <TableRow>
+            <TextView
+                android:id="@+id/textview_RatingValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="5.0"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="30sp" />
 
-    <RatingBar
-    android:id="@+id/ratingBar"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:clickable="false"
-    android:numStars="5"
-    android:progressTint="@color/star"
-    android:stepSize="1.0" />
-    </TableRow>
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:numStars="5"
+                android:progressBackgroundTint="#C7C4C4"
+                android:secondaryProgressTint="#C7C4C4"
+                android:progressTint="#FDE501"
+                android:stepSize="1.0" />
+        </TableRow>
     </TableLayout>
 
 
     <EditText
-    android:id="@+id/edit_Comment"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textAlignment="textStart" />
+        android:id="@+id/edit_Comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="textStart" />
 
     <Button
         android:id="@+id/button_AddComment"
