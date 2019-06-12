@@ -42,12 +42,12 @@ public class ListActivity extends AppCompatActivity {
         });
     } // onCreate
     private  void showData(DataSnapshot data, String userID){
-        Place p;
-//        for (c : data){
-//            p.city = c.
-//        }
-        p = data.child(userID).getValue(Place.class);
-        Toast.makeText(this, p.city.toString(), Toast.LENGTH_LONG).show();
+//        Place p;
+////        for (c : data){
+////            p.city = c.
+////        }
+//        p = data.child(userID).getValue(Place.class);
+//        Toast.makeText(this, p.city.toString(), Toast.LENGTH_LONG).show();
 
     } // showData
 }

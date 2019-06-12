@@ -44,6 +44,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -64,6 +66,7 @@ public class NewPlaceActivity extends FragmentActivity
     private LocationRequest mLocationRequest;
     private Location mLastLocation;
     private Marker mCurrLocationMarker;
+    private DatabaseReference dbRef;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     View mapView;
 
@@ -80,6 +83,7 @@ public class NewPlaceActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_place);
 
+        dbRef = FirebaseDatabase.getInstance().getReference();
 //        editText = findViewById(R.id.actv);
         mSearchView =findViewById(R.id.sv_location);
         txtName = findViewById(R.id.txtName);
@@ -141,6 +145,17 @@ public class NewPlaceActivity extends FragmentActivity
             @Override
             public void onClick(View v) {
 //              txtName.getText().toString(),txtDes.getText().toString(),txtMore.getText().toString(),lbLat.getText(),lbLong.getText();
+
+                if ( txtName.getText() != null &&  txtDes.getText() != null &&  txtMore.getText() != null) {
+                    String key = dbRef.child("places").push().getKey();
+                    Place p = new Place(key, txtName.getText().toString() , txtDes.getText().toString(), lbLat.getText().toString(), lbLong.getText().toString());
+                    dbRef.child("places").child(key).setValue(p.toMap());
+                }
+                txtName.getText().clear();
+                txtDes.getText().clear();
+                txtMore.getText().clear();
+                lbLat.setText("Latitude");
+                lbLong.setText("Longtitude");
                 Toast.makeText(NewPlaceActivity.this, "Thêm place thành công!!", Toast.LENGTH_LONG).show();
             }
         });
@@ -164,6 +179,8 @@ public class NewPlaceActivity extends FragmentActivity
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 Toast.makeText(NewPlaceActivity.this, "Cập Nhật Place thành công!!", Toast.LENGTH_LONG).show();
 //              txtName.getText().toString(),txtDes.getText().toString(),txtMore.getText().toString(),lbLat.getText(),lbLong.getText();
 

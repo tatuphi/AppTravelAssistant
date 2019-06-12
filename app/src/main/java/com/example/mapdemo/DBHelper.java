@@ -57,11 +57,11 @@ public class DBHelper{
         auth.createUserWithEmailAndPassword("email","password");
 
     }
-    public String F_insertLocation(String name, String city, Double rate){
-        String t = dbRef.child("locations").push().getKey();
-        dbRef.child("locations").child(t).setValue(new Place(t, name, city, rate));
-        return t;
-    }
+//    public String F_insertLocation(String name, String city, String rate){
+//        String t = dbRef.child("locations").push().getKey();
+//        dbRef.child("locations").child(t).setValue(new Place(t, name, city, rate));
+//        return t;
+//    }
     public String F_insertReview(String userID, String locationID, String content, Double rate){
         String t = dbRef.child("reviews").push().getKey();
         dbRef.child("reviews").child(t).setValue(new Review(t, userID, locationID, content, rate));
@@ -192,17 +192,17 @@ public class DBHelper{
         return 0;
     }
     // READ
-    public Place getLocation(int locationID){
-        String[] args = {Integer.toString(locationID)};
-        Cursor c1 = db.rawQuery("select * from Location where ID = ?", args);
-        c1.moveToFirst();
-        int ID = c1.getInt(c1.getColumnIndex("ID"));
-        String name = c1.getString(c1.getColumnIndex("name"));
-        String city = c1.getString(c1.getColumnIndex("city"));
-        Double rate = c1.getDouble(c1.getColumnIndex("rate"));
-        String review = c1.getString(c1.getColumnIndex("review"));
-        return new Place("1",name, city, rate);
-    }
+//    public Place getLocation(int locationID){
+//        String[] args = {Integer.toString(locationID)};
+//        Cursor c1 = db.rawQuery("select * from Location where ID = ?", args);
+//        c1.moveToFirst();
+//        int ID = c1.getInt(c1.getColumnIndex("ID"));
+//        String name = c1.getString(c1.getColumnIndex("name"));
+//        String city = c1.getString(c1.getColumnIndex("city"));
+//        Double rate = c1.getDouble(c1.getColumnIndex("rate"));
+//        String review = c1.getString(c1.getColumnIndex("review"));
+//        return new Place("1",name, city, rate);
+//    }
 //    public User getUser(int ID){
 //        String[] args = {Integer.toString(ID)};
 //        Cursor c1 = db.rawQuery("select * from User where ID = ?", args);
