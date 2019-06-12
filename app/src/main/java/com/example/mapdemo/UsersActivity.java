@@ -43,6 +43,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 //import com.google.firebase.database.core.view.View;
 
 import java.util.ArrayList;
@@ -211,10 +216,37 @@ public class UsersActivity extends AppCompatActivity
         POPPULATION.add("1.215.000");
         POPPULATION.add("455.230");
         POPPULATION.add("406.105");
+        // Load Data (Places)
+        Query query = FirebaseDatabase.getInstance().getReference().child("places");
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                getData(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 
     }
-
+    private void getDataFromDB(DataSnapshot data){
+//        Diary d = new Diary();
+        if (data.exists()) {
+            for (DataSnapshot issue : data.getChildren()) {
+                // do with your result
+                Place t = new Place();
+                t.name = issue.child("name").getValue().toString();
+                t.latt = issue.child("latt").getValue().;
+                issue.child("longtt").getValue();
+                issue.child("des").getValue();
+//                issue.child("des");
+            }
+        }
+    }
 
     //info marker click
     @Override
