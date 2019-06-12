@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <android.support.v7.widget.CardView
+        android_layout_height="match_parent"
+        android_layout_margin="5dp"
+
+        android_layout_width="match_parent"
+        android_orientation="horizontal"
+        card_view_cardCornerRadius="10dp"
+        card_view_cardElevation="5dp"
+        android:layout_width="374dp"
+        android:layout_height="157dp"
+        tools:layout_editor_absoluteX="4dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:ignore="MissingConstraints">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/spacecraftImageView"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:padding="5dp"
+                />
+
+            <TextView
+                android:id="@+id/nameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/spacecraftImageView"
+                android:padding="5dp"
+                android:text="NHA TRANG"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/colorTextHint" />
+
+            <TextView
+                android:id="@+id/propellantTextView"
+                android:layout_width="215dp"
+                android:layout_height="88dp"
+                android:layout_alignBottom="@+id/spacecraftImageView"
+                android:layout_marginLeft="9dp"
+                android:layout_marginBottom="4dp"
+                android:layout_toRightOf="@+id/spacecraftImageView"
+                android:padding="5dp"
+                android:text="Propellant"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="italic" />
+
+
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</android.support.constraint.ConstraintLayout>
