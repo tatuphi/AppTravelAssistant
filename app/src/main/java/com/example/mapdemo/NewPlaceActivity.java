@@ -118,9 +118,12 @@ public class NewPlaceActivity extends FragmentActivity
                         e.printStackTrace();
                     }
                     Address address = addressList.get(0);
+                    mMap.clear();
+
                     LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
                     mMap.addMarker(new MarkerOptions().position(latLng).title(location));
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+
                 }
                 return false;
             }
@@ -131,9 +134,6 @@ public class NewPlaceActivity extends FragmentActivity
             }
         });
         mapFrag.getMapAsync(this);
-//        txtName.setOnEditorActionListener(editorListener);
-//        txtDes.setOnEditorActionListener(editorListener);
-//        txtMore.setOnEditorActionListener(editorListener);
         txtName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,8 +144,6 @@ public class NewPlaceActivity extends FragmentActivity
         btnInsert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//              txtName.getText().toString(),txtDes.getText().toString(),txtMore.getText().toString(),lbLat.getText(),lbLong.getText();
-
                 if ( txtName.getText() != null &&  txtDes.getText() != null &&  txtMore.getText() != null) {
                     String key = dbRef.child("places").push().getKey();
                     Place p = new Place(key, txtName.getText().toString() , txtDes.getText().toString(), lbLat.getText().toString(), lbLong.getText().toString());
@@ -180,7 +178,6 @@ public class NewPlaceActivity extends FragmentActivity
             @Override
             public void onClick(View v) {
 
-
                 Toast.makeText(NewPlaceActivity.this, "Cập Nhật Place thành công!!", Toast.LENGTH_LONG).show();
 //              txtName.getText().toString(),txtDes.getText().toString(),txtMore.getText().toString(),lbLat.getText(),lbLong.getText();
 
@@ -188,57 +185,17 @@ public class NewPlaceActivity extends FragmentActivity
         });
     }
 
-    //
-//    private TextView.OnEditorActionListener editorListener = new TextView.OnEditorActionListener() {
-//        @Override
-//        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//            switch (actionId) {
-//                case EditorInfo.IME_ACTION_NEXT:
-//                    Toast.makeText(NewPlaceActivity.this, "Next", Toast.LENGTH_LONG).show();
-//                    break;
-//                case EditorInfo.IME_ACTION_SEND:
-//                    Toast.makeText(NewPlaceActivity.this, "Send", Toast.LENGTH_LONG).show();
-//                    break;
-//            }
-//            return false;
-//        }
-//    };
-//
-//    private void getLatLng() {
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            // TODO: Consider calling
-//            //    ActivityCompat#requestPermissions
-//            // here to request the missing permissions, and then overriding
-//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//            //                                          int[] grantResults)
-//            // to handle the case where the user grants the permission. See the documentation
-//            // for ActivityCompat#requestPermissions for more details.
-//            return;
-//        }
-//        mFusedLocationClient.getLastLocation().addOnSuccessListener(NewPlaceActivity.this, new OnSuccessListener<Location>() {
-//            @Override
-//            public void onSuccess(Location location) {
-//                if (location != null) {
-//                    LatLng latLng =mCurrLocationMarker.getPosition();
-//                    String lat = String.valueOf(latLng.latitude);
-//                    String lng = String.valueOf(latLng.longitude);
-//                    lbLat.setText(lat);
-//                    lbLong.setText(lng);
-////
-////                    String lat = String.valueOf(location.getLatitude());
-////                    String lng = String.valueOf(location.getLongitude());
-//
-//                }
-//            }
-//        });
-//
-//    }
     //info marker click
     @Override
     public void onInfoWindowClick(Marker marker) {
         Toast.makeText(this, "Info window clicked",
                 Toast.LENGTH_SHORT).show();
         //do something
+        LatLng latLng= marker.getPosition();
+        String lat = String.valueOf(latLng.latitude);
+        String lng = String.valueOf(latLng.longitude);
+        lbLat.setText(lat);
+        lbLong.setText(lng);
     }
 
 
@@ -247,7 +204,12 @@ public class NewPlaceActivity extends FragmentActivity
         Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
         // Return false so that we don't consume the event and the default behavior still occurs
         // (the camera animates to the user's current position).
-
+        LatLng latLng = new LatLng(mLastLocation.getLatitude(),mLastLocation.getLongitude());
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+        String lat = String.valueOf(latLng.latitude);
+        String lng = String.valueOf(latLng.longitude);
+        lbLat.setText(lat);
+        lbLong.setText(lng);
         return false;
     }
 
@@ -273,7 +235,6 @@ public class NewPlaceActivity extends FragmentActivity
                 mMap.clear();
                 mCurrLocationMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("Clicked place"));
 
-
                 String lat = String.valueOf(latLng.latitude);
                 String lng = String.valueOf(latLng.longitude);
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
@@ -281,6 +242,7 @@ public class NewPlaceActivity extends FragmentActivity
                 lbLong.setText(lng);
             }
         });
+        mMap.setOnMyLocationButtonClickListener(this);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, 10));
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
@@ -341,10 +303,8 @@ public class NewPlaceActivity extends FragmentActivity
                 //move map camera
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
-                String lat = String.valueOf(latLng.latitude);
-                String lng = String.valueOf(latLng.longitude);
-                lbLat.setText(lat);
-                lbLong.setText(lng);
+//                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+
             }
         }
     };
