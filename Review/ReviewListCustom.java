@@ -75,3 +75,4 @@ public class ReviewListCustom extends BaseAdapter {
         TextView commentView;
     }
 }
+

@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,7 @@ public class ReviewActivity extends Activity {
         ratingBarOld = (RatingBar) findViewById(R.id.ratingBarOld);
         txtRatingAvg = (TextView)findViewById(R.id.textview_RateAvg) ;
         //giá trị trung bình các lượt đánh giá trước
+        //Float oldrating = 4.3f;
         Float oldrating = 4.3f;
         ratingBarOld.setRating( oldrating);
         txtRatingAvg.setText(String.valueOf(oldrating));
@@ -46,14 +49,22 @@ public class ReviewActivity extends Activity {
                 AddCmtDialog.setCancelable(true);
                 ratingBar = (RatingBar)AddCmtDialog.findViewById(R.id.ratingBar);
                 addListenerOnRatingBar();
-                Float getrating = ratingBar.getRating();
                 txtRatingValue = (TextView) AddCmtDialog.findViewById(R.id.textview_RatingValue);
                 txtComment = (EditText)AddCmtDialog.findViewById(R.id.edit_Comment);
                 btnAddComment = (Button)AddCmtDialog.findViewById(R.id.button_AddComment) ;
+                btnAddComment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Float getrating = ratingBar.getRating();
+                        Toast.makeText(ReviewActivity.this,
+                                //String.valueOf(ratingBar.getRating())
+                                "Đã Thêm",
+                                Toast.LENGTH_SHORT).show();
+                        Review rev = new Review("UserName","IconUser",txtComment.getText().toString(),getrating);
+                    }
+                });
                 //show dialog
                 AddCmtDialog.show();
-                // getrating: lấy số sao
-                Review rev = new Review("UserName","IconUser",txtComment.getText().toString(),getrating);
             }
         });
 
