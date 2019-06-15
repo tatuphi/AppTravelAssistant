@@ -9,7 +9,6 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
-import android.renderscript.Double3;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -40,7 +39,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -112,12 +110,7 @@ public class UsersActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
-        PLACES = new ArrayList<String>();
-        LATITUDE = new ArrayList<Double>();
-        LONGTITUDE = new ArrayList<Double>();
-        POPPULATION = new ArrayList<String>();
-
+        // get userID from Default
         // init Authenticator
         auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
@@ -149,16 +142,6 @@ public class UsersActivity extends AppCompatActivity
     }
 
     @Override
-    public void onResume(){
-        super.onResume();
-
-        if(mMap != null){ //prevent crashing if the map doesn't exist yet (eg. on starting activity)
-            mMap.clear();
-            getAllMarker();
-            // add markers from database to the map
-        }
-    }
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
@@ -179,7 +162,7 @@ public class UsersActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
     private void getAllMarker(){
-        for (int i = 0; i < PLACES.size(); i++) {
+        for (int i = 0; i < 5; i++) {
 
             LatLng latLng = new LatLng(LATITUDE.get(i), LONGTITUDE.get(i));
 
@@ -187,7 +170,7 @@ public class UsersActivity extends AppCompatActivity
                     .position(latLng)
                     .title(PLACES.get(i))
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_icon))
-                    .snippet("Population: ")
+                    .snippet("Population: " + POPPULATION.get(i))
             );
 
             marker.hideInfoWindow();
@@ -202,22 +185,45 @@ public class UsersActivity extends AppCompatActivity
     }
 
     private void getData() {
-
+        PLACES = new ArrayList<String>();
+        LATITUDE = new ArrayList<Double>();
+        LONGTITUDE = new ArrayList<Double>();
+        POPPULATION = new ArrayList<String>();
 
         PLACES.add("Hà Nội");
+        PLACES.add("TP.HCM");
+        PLACES.add("Đà Nãng");
+        PLACES.add("Huế");
+        PLACES.add("Đà Lạt");
+
         Countryadapter = new ArrayAdapter(UsersActivity.this,
                 android.R.layout.simple_list_item_1, PLACES);
 
         LATITUDE.add(21.0);
+        LATITUDE.add(10.81667);
+        LATITUDE.add(16.08333);
+        LATITUDE.add(16.46667);
+        LATITUDE.add(108.43833);
+
         LONGTITUDE.add(105.75);
+        LONGTITUDE.add(106.63333);
+        LONGTITUDE.add(108.08333);
+        LONGTITUDE.add(107.58333);
+        LONGTITUDE.add(108.43833);
+
         POPPULATION.add("6.844.100");
+        POPPULATION.add("8.297.500");
+        POPPULATION.add("1.215.000");
+        POPPULATION.add("455.230");
+        POPPULATION.add("406.105");
         // Load Data (Places)
         Query query = FirebaseDatabase.getInstance().getReference().child("places");
 
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                getDataFromDB(dataSnapshot);
+                getData();
+//                dataSnapshot
             }
 
             @Override
@@ -229,16 +235,17 @@ public class UsersActivity extends AppCompatActivity
 
     }
     private void getDataFromDB(DataSnapshot data){
+//        Diary d = new Diary();
         if (data.exists()) {
             for (DataSnapshot issue : data.getChildren()) {
-                PLACES.add(issue.child("name").getValue(String.class));
-                String temp = issue.child("latt").getValue(String.class);
-                LATITUDE.add(Double.parseDouble(temp));
-                temp = issue.child("longtt").getValue(String.class);
-                LONGTITUDE.add(Double.parseDouble(temp));
-
+                // do with your result
+                Place t = new Place();
+                t.name = issue.child("name").getValue().toString();
+                t.latt = issue.child("latt").getValue().toString();
+                issue.child("longtt").getValue();
+                issue.child("des").getValue();
+//                issue.child("des");
             }
-            getAllMarker();
         }
     }
 
@@ -262,9 +269,9 @@ public class UsersActivity extends AppCompatActivity
             String input = Countryadapter.getItem(i);
 
             if (input != null || !input.equals("")) {
-                for (int k = 0; k < PLACES.size(); k++) {
+                for (int k = 0; k < 5; k++) {
                     if (input == PLACES.get(k)) {
-                        Toast.makeText(UsersActivity.this, "Đã chọn "+PLACES.get(k), Toast.LENGTH_LONG).show();
+                        Toast.makeText(UsersActivity.this, "Đã chọn "+PLACES.get(k).toString(), Toast.LENGTH_LONG).show();
 
                         LatLng latLng = new LatLng(LATITUDE.get(k), LONGTITUDE.get(k));
                         //infowindow
@@ -272,6 +279,7 @@ public class UsersActivity extends AppCompatActivity
                                 .position(latLng)
                                 .title(input)
                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_icon))
+                                .snippet("Population: " + POPPULATION.get(k))
                         );
 
                         marker.hideInfoWindow();
@@ -314,7 +322,6 @@ public class UsersActivity extends AppCompatActivity
                 //Location Permission already granted
                 mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
                 mMap.setMyLocationEnabled(true);
-                mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json));
             } else {
                 //Request Location Permission
                 checkLocationPermission();
@@ -366,7 +373,7 @@ public class UsersActivity extends AppCompatActivity
 
 
                 //move map camera
-//                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             }
         }
     };

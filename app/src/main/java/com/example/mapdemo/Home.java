@@ -88,7 +88,7 @@ public class Home extends AppCompatActivity {
         nearBy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= new Intent(Home.this, NewPlaceActivity.class);
+                Intent intent= new Intent(Home.this, MapPlacesActivity.class);
                 startActivity(intent);
             }
         });
@@ -160,7 +160,11 @@ public class Home extends AppCompatActivity {
 //                intent = new Intent(this, WeatherActivity.class);
 //                startActivity(intent);
 //                finish();
-                Toast.makeText(this, "Nearby Services", Toast.LENGTH_LONG).show();
+
+                intent = new Intent(this, MapPlacesActivity.class);
+                startActivity(intent);
+//                finish();
+//                Toast.makeText(this, "Nearby Services", Toast.LENGTH_LONG).show();
                 break;
             case R.id.lnAddNewPlace :
 //                intent = new Intent(this, WeatherActivity.class);

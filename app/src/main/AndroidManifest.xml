@@ -18,7 +18,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".NewPlaceActivity"></activity>
+        <activity android:name=".ViewPlaceActivity"></activity>
+        <activity android:name=".MapPlacesActivity" />
+        <activity android:name=".NewPlaceActivity" />
         <activity android:name=".ListActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -30,7 +32,10 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="AIzaSyBWo8blZ3dGVZ0iLRYxoerPzglMopJHjQY"/>
+            <!--android:value="@string/google_maps_key"-->
+
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" /> <!-- <activity -->
@@ -41,7 +46,7 @@
         <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
         <!-- </intent-filter> -->
         <!-- </activity> -->
-        <activity android:name=".Home"></activity>
+        <activity android:name=".Home" />
         <activity android:name=".Register" />
         <activity android:name=".LoginActivity">
 

@@ -6,11 +6,11 @@ import java.util.Map;
 public class Place{
     public String id;
     public String name, des;
-    public Double latt;
-    public Double longtt;
+    public String latt;
+    public String longtt;
     public Place() {
     }
-    public Place(String ID, String name, String des, Double latt, Double longtt){
+    public Place(String ID, String name, String des, String latt, String longtt){
         this.id = ID;
         this.des = des;
         this.name = name;

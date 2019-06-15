@@ -148,7 +148,7 @@ public class NewPlaceActivity extends FragmentActivity
 
                 if ( txtName.getText() != null &&  txtDes.getText() != null &&  txtMore.getText() != null) {
                     String key = dbRef.child("places").push().getKey();
-                    Place p = new Place(key, txtName.getText().toString() , txtDes.getText().toString(), Double.parseDouble(lbLat.getText().toString()), Double.parseDouble(lbLong.getText().toString()));
+                    Place p = new Place(key, txtName.getText().toString() , txtDes.getText().toString(), lbLat.getText().toString(), lbLong.getText().toString());
                     dbRef.child("places").child(key).setValue(p.toMap());
                 }
                 txtName.getText().clear();
@@ -339,7 +339,7 @@ public class NewPlaceActivity extends FragmentActivity
 
 
                 //move map camera
-//                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
                 String lat = String.valueOf(latLng.latitude);
                 String lng = String.valueOf(latLng.longitude);
