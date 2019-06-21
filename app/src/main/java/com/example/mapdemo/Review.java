@@ -5,8 +5,9 @@ import java.util.Map;
 
 public class Review{
     public String id;
-    public String content, userID, locationID;
+    public String content, userID, locationID, locationName;
     public double rate;
+    public String userName;
 
     public Review() {
     }
@@ -18,6 +19,8 @@ public class Review{
         result.put("userID", userID);
         result.put("rate", rate);
         result.put("id", id);
+        result.put("username", userName);
+        result.put("locationName", locationName);
         return result;
     }
     public  Review(String id, String userID, String locationID, String content, Double rate){

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/textview_PlaceName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tên địa điểm"
+        android:textColor="?attr/actionMenuTextColor"
+        android:textSize="24sp" />
+
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/myTableLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="6dp">
+
+        <TableRow>
+            <TextView
+                android:id="@+id/textview_RateAvg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="5.0"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="30sp" />
+
+            <RatingBar
+                android:id="@+id/ratingBarOld"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:progressBackgroundTint="#C7C4C4"
+                android:secondaryProgressTint="#C7C4C4"
+                android:progressTint="#FDE501"
+                android:rating="0.0"
+                android:stepSize="0.1" />
+        </TableRow>
+    </TableLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Các bình luận tiêu biểu:"
+        android:textColor="@android:color/black"
+        android:textSize="20dp" />
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="564dp"></ListView>
+
+    <Button
+        android:id="@+id/button_AddYourCmt"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_gravity="right"
+        android:gravity="end"
+        android:text="Thêm đánh giá"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
+</LinearLayout>

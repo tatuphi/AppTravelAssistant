@@ -1,11 +1,8 @@
 package com.example.mapdemo;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.NestedScrollView;
@@ -13,10 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,10 +18,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.io.File;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -72,7 +62,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             textInputLayoutEmail = (TextInputLayout) findViewById(R.id.textInputLayoutEmail);
             textInputLayoutPassword = (TextInputLayout) findViewById(R.id.textInputLayoutPassword);
 
-            textInputEditTextEmail = (TextInputEditText) findViewById(R.id.textInputEditTextEmail);
+            textInputEditTextEmail = (TextInputEditText) findViewById(R.id.txtEmail);
             textInputEditTextPassword = (TextInputEditText) findViewById(R.id.textInputEditTextPassword);
 
             appCompatButtonLogin = (AppCompatButton) findViewById(R.id.appCompatButtonLogin);

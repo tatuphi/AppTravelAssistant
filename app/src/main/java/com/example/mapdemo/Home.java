@@ -88,7 +88,7 @@ public class Home extends AppCompatActivity {
         nearBy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= new Intent(Home.this, NewPlaceActivity.class);
+                Intent intent= new Intent(Home.this, MapPlacesActivity.class);
                 startActivity(intent);
             }
         });

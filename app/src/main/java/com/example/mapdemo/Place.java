@@ -22,8 +22,8 @@ public class Place{
         result.put("id", id);
         result.put("name", name);
         result.put("des", des);
-        result.put("latt", latt);
-        result.put("longtt", longtt);
+        result.put("latt", latt.toString());
+        result.put("longtt", longtt.toString());
 
         return result;
     }

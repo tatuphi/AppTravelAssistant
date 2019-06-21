@@ -149,12 +149,13 @@ public class NewPlaceActivity extends FragmentActivity
                     Place p = new Place(key, txtName.getText().toString() , txtDes.getText().toString(), Double.parseDouble(lbLat.getText().toString()), Double.parseDouble(lbLong.getText().toString()));
                     dbRef.child("places").child(key).setValue(p.toMap());
                 }
-                txtName.getText().clear();
-                txtDes.getText().clear();
-                txtMore.getText().clear();
+                txtName.setText("");
+                txtDes.setText("");
+                txtMore.setText("");
                 lbLat.setText("Latitude");
                 lbLong.setText("Longtitude");
                 Toast.makeText(NewPlaceActivity.this, "Thêm place thành công!!", Toast.LENGTH_LONG).show();
+//                finish();
             }
         });
 

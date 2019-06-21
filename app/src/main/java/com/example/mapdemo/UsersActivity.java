@@ -55,6 +55,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -83,7 +84,8 @@ public class UsersActivity extends AppCompatActivity
     ArrayList<Double> LATITUDE;
     ArrayList<Double> LONGTITUDE;
     ArrayList<String> POPPULATION;
-
+    Map<String, String> markers;
+    ArrayList<String> Loc_IDs;
     FirebaseAuth auth;
 
 
@@ -117,6 +119,8 @@ public class UsersActivity extends AppCompatActivity
         LATITUDE = new ArrayList<Double>();
         LONGTITUDE = new ArrayList<Double>();
         POPPULATION = new ArrayList<String>();
+        markers = new HashMap<String, String>();
+        Loc_IDs = new ArrayList<String>();
 
         // init Authenticator
         auth = FirebaseAuth.getInstance();
@@ -189,9 +193,10 @@ public class UsersActivity extends AppCompatActivity
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_icon))
                     .snippet("Population: ")
             );
-
+            markers.put(marker.getId(), Loc_IDs.get(i));
             marker.hideInfoWindow();
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5));
+            mMap.setOnInfoWindowClickListener(this);
 
         }
     }
@@ -207,10 +212,11 @@ public class UsersActivity extends AppCompatActivity
         PLACES.add("Hà Nội");
         Countryadapter = new ArrayAdapter(UsersActivity.this,
                 android.R.layout.simple_list_item_1, PLACES);
-
+//        Loc_ID.add
         LATITUDE.add(21.0);
         LONGTITUDE.add(105.75);
         POPPULATION.add("6.844.100");
+        Loc_IDs.add("1");
         // Load Data (Places)
         Query query = FirebaseDatabase.getInstance().getReference().child("places");
 
@@ -236,7 +242,7 @@ public class UsersActivity extends AppCompatActivity
                 LATITUDE.add(Double.parseDouble(temp));
                 temp = issue.child("longtt").getValue(String.class);
                 LONGTITUDE.add(Double.parseDouble(temp));
-
+                Loc_IDs.add(issue.child("id").getValue(String.class));
             }
             getAllMarker();
         }
@@ -245,9 +251,18 @@ public class UsersActivity extends AppCompatActivity
     //info marker click
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Toast.makeText(this, "Info window clicked",
-                Toast.LENGTH_SHORT).show();
-        //do something
+        if (markers.size() <= 0){
+            Toast.makeText(this, "markers empty",
+            Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String locationID = markers.get(marker.getId());
+        Intent i = new Intent(this, ReviewActivity.class);
+        i.putExtra("LOCATION_ID", locationID);
+        startActivity(i);
+//        Toast.makeText(this, locationID,
+//                Toast.LENGTH_SHORT).show();
+//        //do something
     }
 
     private void hideSoftKeyboard() {
@@ -301,7 +316,7 @@ public class UsersActivity extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setOnInfoWindowClickListener(this);
+//        mMap.setOnInfoWindowClickListener(this);
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);

@@ -18,8 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".NewPlaceActivity"></activity>
-        <activity android:name=".ListActivity" />
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -41,17 +40,15 @@
         <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
         <!-- </intent-filter> -->
         <!-- </activity> -->
-        <activity android:name=".Home"></activity>
+        <activity android:name=".NewPlaceActivity" />
+        <activity android:name=".ListActivity" />
+        <activity android:name=".MapPlacesActivity" />
+        <activity android:name=".ViewPlaceActivity" />
+        <activity android:name=".ReviewActivity" />
+
+        <activity android:name=".Home" />
         <activity android:name=".Register" />
-        <activity android:name=".LoginActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
+        <activity android:name=".LoginActivity"/>
         <activity
             android:name=".UsersActivity"
             android:screenOrientation="portrait">
@@ -64,33 +61,9 @@
         <activity
             android:name=".ForgotPassword"
             android:screenOrientation="portrait" />
-        <activity android:name=".DiaryActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
-        <activity android:name=".ChecklistActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
-        <activity android:name=".WeatherActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
+        <activity android:name=".DiaryActivity"/>
+        <activity android:name=".ChecklistActivity"/>
+        <activity android:name=".WeatherActivity"/>
     </application>
 
 </manifest>
